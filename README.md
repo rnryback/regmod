@@ -24,4 +24,4 @@ The criteria that your classmates will use to evaluate and grade your work are s
 Each criteria is binary: (1 point = criteria met acceptably; 0 points = criteria not met acceptably)
 Your Course Project score will be the sum of the points and will count as 40% of your final grade in the course. 
 
-Full report available at [GitHub](http://rpubs.com/rnryback/rmodels)
+Full report available at [RPubs](http://rpubs.com/rnryback/rmodels)
