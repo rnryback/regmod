@@ -1,0 +1,81 @@
+---
+title: "Regression Models Assignment"
+author: "Rnryback [GitHub](https://github.com/rnryback)"
+date: "21th January 2015"
+output: pdf_document
+---
+
+##Executive Summary
+
+You work for Motor Trend, a magazine about the automobile industry. Looking at a data set of a collection of cars, they are interested in exploring the relationship between a set of variables and miles per gallon (MPG) (outcome). They are particularly interested in the following two questions:
+
+“Is an automatic or manual transmission better for MPG”
+
+"Quantify the MPG difference between automatic and manual transmissions"  
+
+Based on the final model fitting results, we can conclude that:
+
+1. As wt increases per 1000lb (0.5 tons), the mpg will decrease by 2.5.  
+2. MpG will decrease very slighly with HP increase.  
+3. cyl increases from 4 to 6 to 8, will cause MpG to decrease by 3 and 2 times respectively.  
+4. Automatic gearing has higher MpG compared to manual gearing.
+
+##Data Analysis
+
+```{r Loading dependencies and exploring the data, results='hide'}
+library(ggplot2)
+data(mtcars)
+attach(mtcars)
+```
+
+This first look at the data shows us that HP and MpG are inversely related and manual transmission cars are generally more fuel efficient.
+
+```{r Plotting, results='hide'}
+mtcars$amf[am==0]='AUT'
+mtcars$amf[am==1]='MAN'
+print(qplot(x=wt, y=mpg, colour=am, facets=.~amf, data=mtcars,main="MpG vs. Weight/Gearing"))
+
+```
+
+Looking further we see that manual transmission cars tend to have smaller weight and use less fuel.
+
+###Making our model
+
+We will perform linear regression with all variables, and then perfom stepwise model selection to select the best predictors. cyl, am, hp and wt will be included in the final model.
+
+```{r Model1, results='hide'}
+fit<-glm(mpg~as.factor(cyl) + as.factor(vs) + as.factor(am) + as.factor(gear) + as.factor(carb) + disp + hp + drat + wt + qsec, data=mtcars)
+library(MASS)
+step <- stepAIC(fit, direction="both")
+step$anova
+```
+
+
+##Conclussions
+
+Based on the final model fitting results, we can conclude that:
+
+1. As wt increases per 1000lb (0.5 tons), the mpg will decrease by 2.5.  
+2. MpG will decrease very slighly with HP increase.  
+3. cyl increases from 4 to 6 to 8, will cause MpG to decrease by 3 and 2 times respectively.  
+4. Automatic gearing has higher MpG compared to manual gearing.
+
+##Appendix
+
+###Initial Explorations
+```{r Loading dependencies and exploring the data show}
+
+plot(hp, mpg, pch=am,col=259,bg=7,
+  xlab="Horsepower", cex=1.2,
+  ylab="Miles per gallon", main="MpG vs. HP /Gearing")
+legend("topright", c("AUT","MAN"), pch=c(0,1))
+
+```
+
+###Final model
+```{r Plotting final model}
+fit2<-glm(mpg ~ as.factor(cyl) + as.factor(am) + hp + wt, data=mtcars)
+layout(matrix(c(1,2,3,4),2,2)) 
+plot(fit2)
+```
+
